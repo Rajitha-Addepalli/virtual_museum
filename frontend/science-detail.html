@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Science Detail - Virtual Museum</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { scroll-behavior: smooth; }
+    .item-image { max-height: 70vh; }
+    .prose h2 { font-size: 1.5rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; color: #946D43; }
+    .prose p { margin-bottom: 1rem; line-height: 1.6; }
+    .prose ul { list-style-type: disc; padding-left: 1.5rem; }
+    .favorite-icon { cursor: pointer; }
+    .bg-custom-pink { background-color: #946D43; }
+    .text-custom-pink { color: #946D43; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-custom-pink text-white p-4 fixed w-full top-0 z-10">
+    <div class="flex justify-between items-center">
+      <a href="home.html" class="text-4xl font-bold ml-0">Virtual Museum</a>
+      <div class="hidden md:flex space-x-4">
+        <a href="home.html" class="hover:text-gray-200">Home</a>
+        <a href="galleries.html" class="hover:text-gray-200">Galleries</a>
+        <a href="dashboard.html" class="hover:text-gray-200">Dashboard</a>
+        <a href="favorites.html" class="hover:text-gray-200">Favorites</a>
+        <a href="science-gallery.html" class="hover:text-gray-200">Back to Gallery</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-custom-pink">
+      <a href="home.html" class="block py-2 px-4 hover:bg-indigo-700">Home</a>
+      <a href="galleries.html" class="block py-2 px-4 hover:bg-indigo-700">Galleries</a>
+      <a href="dashboard.html" class="block py-2 px-4 hover:bg-indigo-700">Dashboard</a>
+      <a href="favorites.html" class="block py-2 px-4 hover:bg-indigo-700">Favorites</a>
+      <a href="science-gallery.html" class="block py-2 px-4 hover:bg-indigo-700">Back to Gallery</a>
+    </div>
+  </nav>
+
+  <!-- Science Detail Section -->
+  <section class="min-h-screen pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <div id="item-detail" class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden animate-fade-in">
+        <!-- Image and basic info -->
+        <div class="md:flex">
+          <div class="md:w-1/2 relative">
+            <img id="item-img" src="" alt="" class="w-full h-full object-cover item-image">
+            <span id="favorite-icon" class="favorite-icon absolute top-2 right-2 text-3xl p-1 bg-white rounded-full text-gray-400"></span>
+          </div>
+          <div class="p-6 md:p-8 md:w-1/2">
+            <h1 id="item-title" class="text-3xl font-bold"></h1>
+            <p id="item-inventor" class="text-xl text-gray-600 mt-2"></p>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div>
+                <h4 class="font-semibold">Year</h4>
+                <p id="item-year"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Type</h4>
+                <p id="item-type"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Dimensions/Scale</h4>
+                <p id="item-dimensions"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Location</h4>
+                <p id="item-location"></p>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <h4 class="font-semibold">Quick Facts</h4>
+              <ul id="item-facts" class="mt-2"></ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detailed description -->
+        <div class="p-6 md:p-8 border-t">
+          <div id="item-description" class="prose max-w-none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-custom-pink text-white p-4">
+    <div class="container mx-auto text-center">
+      <p>© 2025 Virtual Museum. All rights reserved.</p>
+      <div class="flex justify-center space-x-4 mt-4">
+        <a href="#" class="hover:text-gray-300">Twitter</a>
+        <a href="#" class="hover:text-gray-300">Instagram</a>
+        <a href="#" class="hover:text-gray-300">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Item database with detailed scientific information
+    const items = {
+      1: {
+        title: "Steam Engine",
+        inventor: "James Watt (improved, 1765)",
+        year: "1765 (significant improvement)",
+        type: "Mechanical engine",
+        dimensions: "Variable (industrial scale)",
+        location: "Science Museum, London (replicas)",
+        image: "https://images.ctfassets.net/cbk8m389sggz/7zh8NUfSZHVr0XQwZWu5fh/a1dba9c82f8f2433fb08e844fb1cc60a/rr058004_American.jpeg?w=1500&h=765&fl=progressive&q=50&fm=jpg",
+        facts: [
+          "Improved by Watt from Newcomen's design",
+          "Fueled the Industrial Revolution",
+          "Used in factories, railways, and ships"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Developed in the 18th century, the steam engine was significantly improved by James Watt in 1765, building on Thomas Newcomen's earlier design. It emerged during the Industrial Revolution, addressing the need for efficient power sources.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The steam engine converted heat energy into mechanical work, using steam pressure to drive pistons. Watt's addition of a separate condenser increased efficiency, making it viable for diverse applications like manufacturing and transportation.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Constructed from iron and steel, the engine featured a boiler, piston, and condenser. Watt's design reduced fuel consumption, with precise engineering ensuring reliability. Its scalability allowed adaptation to various industries.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The steam engine transformed industry, enabling mass production and global trade. It spurred innovations in engineering and thermodynamics, laying the groundwork for modern engines and influencing economic and social change.</p>
+        `
+      },
+      2: {
+        title: "Telegraph",
+        inventor: "Samuel Morse (1837)",
+        year: "1837",
+        type: "Communication device",
+        dimensions: "Variable (stationary equipment)",
+        location: "National Museum of American History",
+        image: "https://fi.edu/sites/default/files/2023-10/telegrapgh.jpg",
+        facts: [
+          "First practical electrical communication system",
+          "Used Morse code for messages",
+          "Revolutionized long-distance communication"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Developed by Samuel Morse in 1837, the telegraph was the first practical application of electricity for communication, emerging during the early stages of electrical engineering development.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The telegraph transmitted electrical signals over wires, using Morse code to encode messages. This system demonstrated the practical application of electromagnetism and electrical circuits.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Early telegraph systems consisted of a battery, key, wire, and sounder. Morse's design was robust enough for commercial use, with improvements in insulation and relay stations extending its range.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The telegraph revolutionized communication, enabling near-instantaneous information transfer across continents. It laid the foundation for all subsequent electrical communication technologies, including the telephone and internet.</p>
+        `
+      },
+      3: {
+        title: "Telephone",
+        inventor: "Alexander Graham Bell (1876)",
+        year: "1876",
+        type: "Communication device",
+        dimensions: "Approx. 20 cm × 15 cm × 10 cm (early models)",
+        location: "National Museum of American History",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Telefon_BW_2012-02-18_13-44-32.JPG/1200px-Telefon_BW_2012-02-18_13-44-32.JPG",
+        facts: [
+          "First device to transmit human voice electronically",
+          "Patent awarded to Bell in 1876",
+          "Led to global communication networks"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Alexander Graham Bell patented the telephone in 1876, building on earlier work with harmonic telegraphy. It emerged during a period of rapid innovation in electrical communication technologies.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The telephone converted sound waves into electrical signals and back again, enabling real-time voice communication over distances. Bell's design demonstrated the practical application of acoustic and electrical principles.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Early telephones used a diaphragm, electromagnet, and acid-based liquid transmitter. The technology quickly evolved with improvements in transmitters, switches, and wiring infrastructure.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The telephone transformed personal and business communication, leading to global networks. It inspired countless innovations in electronics and remains foundational to modern communication systems.</p>
+        `
+      },
+      4: {
+        title: "Electric Light Bulb",
+        inventor: "Thomas Edison (1879)",
+        year: "1879",
+        type: "Electrical device",
+        dimensions: "Approx. 13 cm high",
+        location: "Multiple museums (replicas)",
+        image: "https://images.twinkl.co.uk/tr/raw/upload/u/ux/lightbulb-1875247-1920_ver_1.jpg",
+        facts: [
+          "Edison improved earlier designs",
+          "First commercially practical bulb",
+          "Used a carbon filament"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>In 1879, Thomas Edison developed a commercially viable incandescent light bulb, building on earlier inventors like Humphry Davy. It emerged during the Second Industrial Revolution, driven by electricity's rise.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The bulb produced light by heating a filament, with Edison's carbonized thread achieving longevity and affordability. Its design balanced efficiency and practicality, enabling widespread adoption in homes and industries.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Constructed with a glass bulb, vacuum pump, and carbon filament, the design minimized oxidation. Edison's team optimized materials and manufacturing, producing bulbs scalable for mass production.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The light bulb revolutionized daily life, extending work and leisure hours. It spurred electrical infrastructure development and inspired innovations in lighting, from fluorescents to LEDs, shaping modern society.</p>
+        `
+      },
+      5: {
+        title: "Penicillin",
+        inventor: "Alexander Fleming (1928)",
+        year: "1928",
+        type: "Antibiotic",
+        dimensions: "Microscopic (chemical compound)",
+        location: "Various (archival samples)",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQNYM6JMFAvtWmWShDwtx74tvKeIbbJ2pr-4g&s",
+        facts: [
+          "Discovered accidentally from mold",
+          "First mass-produced in the 1940s",
+          "Saved millions during WWII"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>In 1928, Alexander Fleming discovered penicillin, the first antibiotic, during experiments with bacteria. Its development in the 1940s addressed urgent medical needs during World War II.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>Penicillin kills bacteria by disrupting cell wall synthesis, offering a targeted treatment for infections. Its discovery marked a shift from nonspecific remedies to precise antimicrobial therapies, transforming medicine.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Derived from Penicillium mold, penicillin was initially challenging to isolate and produce. Advances in fermentation and purification by scientists like Florey and Chain enabled mass production.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>Penicillin ushered in the antibiotic era, reducing mortality from infections. It spurred pharmaceutical research, though resistance issues highlight its ongoing relevance in medical science and policy.</p>
+        `
+      },
+      6: {
+        title: "ENIAC Computer",
+        inventor: "Mauchly and Eckert (1945)",
+        year: "1945",
+        type: "Electronic computer",
+        dimensions: "Approx. 30 m × 3 m",
+        location: "Smithsonian Institution (parts)",
+        image: "https://www.simslifecycle.com/wp-content/uploads/sites/2/2022/01/Electronic-Numerical-Integrator-And-Computer.png",
+        facts: [
+          "First general-purpose electronic computer",
+          "Used 18,000 vacuum tubes",
+          "Programmed via plugboards and switches"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Completed in 1945, the ENIAC (Electronic Numerical Integrator and Computer) was developed by John Mauchly and J. Presper Eckert during WWII to calculate artillery tables, marking the dawn of digital computing.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>ENIAC performed complex calculations at unprecedented speeds, demonstrating electronic computing's potential. Its reprogrammable design, though cumbersome, laid the foundation for modern computers.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built with vacuum tubes, wiring, and plugboards, ENIAC occupied a large room and consumed significant power. Its modular design allowed flexibility, with meticulous engineering ensuring reliability.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>ENIAC catalyzed the computer revolution, influencing hardware and software development. Its legacy includes modern computing industries, with its components preserved as milestones in technological history.</p>
+        `
+      },
+      7: {
+        title: "Transistor",
+        inventor: "Bardeen, Brattain, and Shockley (1947)",
+        year: "1947",
+        type: "Electronic component",
+        dimensions: "Microscopic (modern versions nanometer scale)",
+        location: "Bell Labs Museum (replicas)",
+        image: "https://www.matidavid.com/electronic_components/04_files/4-01.gif",
+        facts: [
+          "Invented at Bell Labs",
+          "Replaced vacuum tubes in electronics",
+          "Foundation of modern electronics"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Invented in 1947 by John Bardeen, Walter Brattain, and William Shockley at Bell Labs, the transistor emerged from semiconductor research, revolutionizing electronics in the post-war era.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The transistor amplifies and switches electronic signals using semiconductor materials. Its small size, reliability, and efficiency made it superior to vacuum tubes, enabling miniaturization of electronics.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Early point-contact transistors used germanium crystals. Modern transistors are silicon-based and manufactured at nanometer scales through photolithography, with billions fitting on single chips.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The transistor enabled the digital age, making possible computers, smartphones, and all modern electronics. Its inventors won the Nobel Prize, and its ongoing miniaturization drives technological progress.</p>
+        `
+      },
+      8: {
+        title: "Internet",
+        inventor: "Various (ARPANET pioneers)",
+        year: "1969 (ARPANET)",
+        type: "Global network",
+        dimensions: "Planetary scale",
+        location: "Virtual/global",
+        image: "https://askleo.com/wp-content/uploads/2018/10/internet.jpg",
+        facts: [
+          "Evolved from ARPANET project",
+          "TCP/IP protocol developed in 1970s",
+          "World Wide Web created in 1989"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>The Internet originated from ARPANET in 1969, a U.S. Defense Department project. It grew through academic and research collaborations, becoming a global network in the 1990s.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The Internet operates via packet switching and standardized protocols (TCP/IP), enabling decentralized, robust communication. Its layered architecture allows diverse applications and services to coexist.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>The physical infrastructure includes fiber optic cables, routers, and servers. Key innovations include DNS, HTTP/HTML (Web), and encryption protocols, with continuous evolution in speed and security.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The Internet has transformed communication, commerce, and culture globally. It enables instant information sharing and collaboration at unprecedented scale, becoming essential to modern life and research.</p>
+        `
+      },
+      9: {
+        title: "DNA Structure",
+        inventor: "Watson, Crick, and Franklin (1953)",
+        year: "1953",
+        type: "Molecular model",
+        dimensions: "Nanometer scale",
+        location: "Various (educational models)",
+        image: "https://www.thoughtco.com/thmb/dj4nerFEPPv_pE3D-TRLYo_b-a0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/3-D_DNA-56a09ae45f9b58eba4b20266.jpg",
+        facts: [
+          "Double helix structure discovered",
+          "Based on X-ray crystallography data",
+          "Foundation of molecular biology"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>In 1953, James Watson and Francis Crick, with crucial data from Rosalind Franklin, determined DNA's double helix structure, solving the mystery of genetic information storage.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>The model shows two complementary strands with nucleotide base pairing (A-T, C-G), explaining replication and information encoding. This structure elegantly fulfills genetic material requirements.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Franklin's X-ray diffraction images (Photo 51) revealed the helix's dimensions. Watson and Crick built physical models incorporating Chargaff's base ratio rules to deduce the structure.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>The discovery launched molecular biology, enabling genetic engineering, biotechnology, and genomic medicine. It remains a cornerstone of life sciences, with ongoing discoveries building on this foundation.</p>
+        `
+      },
+      10: {
+        title: "Quantum Computer",
+        inventor: "Various (modern development)",
+        year: "1990s-present",
+        type: "Computing device",
+        dimensions: "Variable (lab-scale systems)",
+        location: "Research labs (e.g., IBM, Google)",
+        image: "https://www.science.org/do/10.1126/science.adh2923/abs/_20230224_nid_quantumcomputing_sq.jpg",
+        facts: [
+          "Uses quantum bits (qubits)",
+          "Pioneered by Feynman and Deutsch",
+          "Potential to solve complex problems"
+        ],
+        description: `
+          <h2>Scientific Context</h2>
+          <p>Quantum computers, developed since the 1990s, leverage quantum mechanics to perform computations, emerging from theoretical work by Richard Feynman and David Deutsch in the digital age.</p>
+          
+          <h2>Scientific Analysis</h2>
+          <p>Unlike classical computers, quantum computers use qubits with superposition and entanglement, enabling parallel processing for specific problems like cryptography and simulations, outpacing traditional systems.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built with superconducting circuits or trapped ions, quantum computers require ultra-low temperatures and precise control. Their complex hardware and error correction are ongoing challenges.</p>
+          
+          <h2>Scientific Impact</h2>
+          <p>Quantum computing promises breakthroughs in drug discovery, materials science, and AI. Its development drives investment and research, with prototypes showcased as milestones in technological innovation.</p>
+        `
+      }
+    };
+
+    // Load favorites from localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    // Function to check if an item is in favorites
+    function isFavorite(id, type) {
+      return favorites.some(item => item.id == id && item.type === type);
+    }
+
+    // Function to toggle favorite status
+    function toggleFavorite(element, id, type, title, image) {
+      const item = { id, type, title, image };
+      const index = favorites.findIndex(fav => fav.id == id && fav.type === type);
+
+      if (index === -1) {
+        // Add to favorites
+        favorites.push(item);
+        element.classList.remove('text-gray-400');
+        element.classList.add('text-red-500');
+      } else {
+        // Remove from favorites
+        favorites.splice(index, 1);
+        element.classList.remove('text-red-500');
+        element.classList.add('text-gray-400');
+      }
+
+      // Update localStorage
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    // Load item based on ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('id');
+    const item = items[itemId];
+
+    if (item) {
+      // Update page title
+      document.title = `${item.title} | Virtual Museum`;
+      
+      // Set item image
+      document.getElementById('item-img').src = item.image;
+      document.getElementById('item-img').alt = item.title;
+      
+      // Set favorite icon
+      const favoriteIcon = document.getElementById('favorite-icon');
+      favoriteIcon.textContent = '♥';
+      favoriteIcon.dataset.id = itemId;
+      favoriteIcon.dataset.title = item.title;
+      favoriteIcon.dataset.image = item.image;
+      if (isFavorite(itemId, 'science')) {
+        favoriteIcon.classList.remove('text-gray-400');
+        favoriteIcon.classList.add('text-red-500');
+      }
+      favoriteIcon.addEventListener('click', () => {
+        toggleFavorite(favoriteIcon, itemId, 'science', item.title, item.image);
+      });
+      
+      // Set basic info
+      document.getElementById('item-title').textContent = item.title;
+      document.getElementById('item-inventor').textContent = item.inventor;
+      document.getElementById('item-year').textContent = item.year;
+      document.getElementById('item-type').textContent = item.type;
+      document.getElementById('item-dimensions').textContent = item.dimensions;
+      document.getElementById('item-location').textContent = item.location;
+      
+      // Set facts list
+      const factsList = document.getElementById('item-facts');
+      item.facts.forEach(fact => {
+        const li = document.createElement('li');
+        li.textContent = fact;
+        factsList.appendChild(li);
+      });
+      
+      // Set detailed description
+      document.getElementById('item-description').innerHTML = item.description;
+    } else {
+      // Item not found
+      document.getElementById('item-detail').innerHTML = `
+        <div class="p-8 text-center">
+          <h2 class="text-2xl font-bold">Item Not Found</h2>
+          <p class="mt-4">The requested scientific item could not be found in our collection.</p>
+          <a href="science-gallery.html" class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            Return to Gallery
+          </a>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

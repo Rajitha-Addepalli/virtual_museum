@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favorites - Virtual Museum</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { scroll-behavior: smooth; }
+    .animate-fade-in { animation: fadeIn 1s ease-in; }
+    @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+    .card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card:hover { transform: scale(1.02); box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); }
+    .bg-custom-pink { background-color: #946D43; }
+    .text-custom-pink { color: #946D43; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-custom-pink text-white p-4 fixed w-full top-0 z-10">
+    <div class="flex justify-between items-center">
+      <a href="home.html" class="text-4xl font-bold ml-0">Virtual Museum</a>
+      <div class="hidden md:flex space-x-4">
+        <a href="home.html" class="hover:text-gray-200">Home</a>
+        <a href="galleries.html" class="hover:text-gray-200">Galleries</a>
+        <a href="dashboard.html" class="hover:text-gray-200">Dashboard</a>
+        <a href="favorites.html" class="hover:text-gray-200 font-bold">Favorites</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-custom-pink">
+      <a href="home.html" class="block py-2 px-4 hover:bg-indigo-700">Home</a>
+      <a href="galleries.html" class="block py-2 px-4 hover:bg-indigo-700">Galleries</a>
+      <a href="dashboard.html" class="block py-2 px-4 hover:bg-indigo-700">Dashboard</a>
+      <a href="favorites.html" class="block py-2 px-4 hover:bg-indigo-700">Favorites</a>
+    </div>
+  </nav>
+
+  <!-- Favorites Section -->
+  <section class="min-h-screen pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold text-center mb-8 animate-fade-in text-custom-pink">Your Favorites</h1>
+      <p class="text-lg text-center mb-12 max-w-3xl mx-auto">Explore your collection of saved artworks, historical artifacts, and scientific inventions. Add more from the galleries!</p>
+
+      <div id="favorites-list" class="space-y-12">
+        <!-- Art Favorites -->
+        <div class="border-2 border-gray-300 rounded-lg p-6">
+          <h2 class="text-2xl font-semibold mb-6 text-custom-pink">Art Favorites</h2>
+          <div id="art-favorites" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+        <!-- History Favorites -->
+        <div class="border-2 border-gray-300 rounded-lg p-6">
+          <h2 class="text-2xl font-semibold mb-6 text-custom-pink">History Favorites</h2>
+          <div id="history-favorites" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+        <!-- Science Favorites -->
+        <div class="border-2 border-gray-300 rounded-lg p-6">
+          <h2 class="text-2xl font-semibold mb-6 text-custom-pink">Science Favorites</h2>
+          <div id="science-favorites" class="grid md:grid-cols-3 gap-6"></div>
+        </div>
+      </div>
+
+      <div class="text-center mt-12">
+        <a href="galleries.html" class="inline-block px-6 py-3 bg-custom-pink text-white rounded-full font-semibold hover:bg-custom-pink">Add More Favorites</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-custom-pink text-white p-4">
+    <div class="container mx-auto text-center">
+      <p>© 2025 Virtual Museum. All rights reserved.</p>
+      <div class="flex justify-center space-x-4 mt-4">
+        <a href="#" class="hover:text-gray-300">Twitter</a>
+        <a href="#" class="hover:text-gray-300 Citadel</a>
+        <a href="#" class="hover:text-gray-300">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Load favorites from localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    // Function to get detail page URL based on item type
+    function getDetailUrl(type, id) {
+      switch (type) {
+        case 'art': return `artwork-detail.html?id=${id}`;
+        case 'history': return `history-detail.html?id=${id}`;
+        case 'science': return `science-detail.html?id=${id}`;
+        default: return '#';
+      }
+    }
+
+    // Function to remove item from favorites
+    function removeFavorite(id, type) {
+      const updatedFavorites = favorites.filter(item => !(item.id == id && item.type === type));
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      window.location.reload(); // Refresh to update display
+    }
+
+    // Render favorites by type
+    function renderFavorites() {
+      const artFavorites = document.getElementById('art-favorites');
+      const historyFavorites = document.getElementById('history-favorites');
+      const scienceFavorites = document.getElementById('science-favorites');
+
+      // Filter favorites by type
+      const artItems = favorites.filter(item => item.type === 'art');
+      const historyItems = favorites.filter(item => item.type === 'history');
+      const scienceItems = favorites.filter(item => item.type === 'science');
+
+      // Render Art Favorites
+      if (artItems.length === 0) {
+        artFavorites.innerHTML = '<p class="text-gray-600">No art favorites saved yet.</p>';
+      } else {
+        artItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card bg-white rounded-lg shadow-md overflow-hidden';
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="font-bold text-lg mb-2">${item.title}</h3>
+              <a href="${getDetailUrl(item.type, item.id)}" class="inline-block text-custom-pink hover:underline">View Details</a>
+              <button onclick="removeFavorite(${item.id}, '${item.type}')" class="mt-2 text-red-600 hover:underline">Remove</button>
+            </div>
+          `;
+          artFavorites.appendChild(card);
+        });
+      }
+
+      // Render History Favorites
+      if (historyItems.length === 0) {
+        historyFavorites.innerHTML = '<p class="text-gray-600">No history favorites saved yet.</p>';
+      } else {
+        historyItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card bg-white rounded-lg shadow-md overflow-hidden';
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="font-bold text-lg mb-2">${item.title}</h3>
+              <a href="${getDetailUrl(item.type, item.id)}" class="inline-block text-custom-pink hover:underline">View Details</a>
+              <button onclick="removeFavorite(${item.id}, '${item.type}')" class="mt-2 text-red-600 hover:underline">Remove</button>
+            </div>
+          `;
+          historyFavorites.appendChild(card);
+        });
+      }
+
+      // Render Science Favorites
+      if (scienceItems.length === 0) {
+        scienceFavorites.innerHTML = '<p class="text-gray-600">No science favorites saved yet.</p>';
+      } else {
+        scienceItems.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card bg-white rounded-lg shadow-md overflow-hidden';
+          card.innerHTML = `
+            <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+            <div class="p-4">
+              <h3 class="font-bold text-lg mb-2">${item.title}</h3>
+              <a href="${getDetailUrl(item.type, item.id)}" class="inline-block text-custom-pink hover:underline">View Details</a>
+              <button onclick="removeFavorite(${item.id}, '${item.type}')" class="mt-2 text-red-600 hover:underline">Remove</button>
+            </div>
+          `;
+          scienceFavorites.appendChild(card);
+        });
+      }
+    }
+
+    // Initialize favorites rendering
+    renderFavorites();
+  </script>
+</body>
+</html>

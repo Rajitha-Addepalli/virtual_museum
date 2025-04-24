@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History Detail - Virtual Museum</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { scroll-behavior: smooth; }
+    .item-image { max-height: 70vh; }
+    .prose h2 { color: #946D43; font-size: 1.5rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; }
+    .prose p { margin-bottom: 1rem; line-height: 1.6; }
+    .prose ul { list-style-type: disc; padding-left: 1.5rem; }
+    .favorite-icon { cursor: pointer; }
+    .bg-custom-pink { background-color: #946D43; }
+    .text-custom-pink { color: #946D43; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-custom-pink text-white p-4 fixed w-full top-0 z-10">
+    <div class="flex justify-between items-center">
+      <a href="home.html" class="text-4xl font-bold ml-0">Virtual Museum</a>
+      <div class="hidden md:flex space-x-4">
+        <a href="home.html" class="hover:text-gray-200">Home</a>
+        <a href="galleries.html" class="hover:text-gray-200">Galleries</a>
+        <a href="dashboard.html" class="hover:text-gray-200">Dashboard</a>
+        <a href="favorites.html" class="hover:text-gray-200">Favorites</a>
+        <a href="history-gallery.html" class="hover:text-gray-200">Back to Gallery</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-custom-pink">
+      <a href="home.html" class="block py-2 px-4 hover:bg-indigo-700">Home</a>
+      <a href="galleries.html" class="block py-2 px-4 hover:bg-indigo-700">Galleries</a>
+      <a href="dashboard.html" class="block py-2 px-4 hover:bg-indigo-700">Dashboard</a>
+      <a href="favorites.html" class="block py-2 px-4 hover:bg-indigo-700">Favorites</a>
+      <a href="history-gallery.html" class="block py-2 px-4 hover:bg-indigo-700">Back to Gallery</a>
+    </div>
+  </nav>
+
+  <!-- History Detail Section -->
+  <section class="min-h-screen pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <div id="item-detail" class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden animate-fade-in">
+        <!-- Image and basic info -->
+        <div class="md:flex">
+          <div class="md:w-1/2 relative">
+            <img id="item-img" src="" alt="" class="w-full h-full object-cover item-image">
+            <span id="favorite-icon" class="favorite-icon absolute top-2 right-2 text-3xl p-1 bg-white rounded-full text-gray-400"></span>
+          </div>
+          <div class="p-6 md:p-8 md:w-1/2">
+            <h1 id="item-title" class="text-3xl font-bold"></h1>
+            <p id="item-origin" class="text-xl text-gray-600 mt-2"></p>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div>
+                <h4 class="font-semibold">Period/Year</h4>
+                <p id="item-year"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Material</h4>
+                <p id="item-material"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Dimensions</h4>
+                <p id="item-dimensions"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Location</h4>
+                <p id="item-location"></p>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <h4 class="font-semibold">Quick Facts</h4>
+              <ul id="item-facts" class="mt-2"></ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detailed description -->
+        <div class="p-6 md:p-8 border-t">
+          <div id="item-description" class="prose max-w-none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-custom-pink text-white p-4">
+    <div class="container mx-auto text-center">
+      <p>© 2025 Virtual Museum. All rights reserved.</p>
+      <div class="flex justify-center space-x-4 mt-4">
+        <a href="#" class="hover:text-gray-300">Twitter</a>
+        <a href="#" class="hover:text-gray-300">Instagram</a>
+        <a href="#" class="hover:text-gray-300">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Item database with detailed historical information
+    const items = {
+      1: {
+        title: "Rosetta Stone",
+        origin: "Ancient Egypt",
+        year: "196 BCE",
+        material: "Granodiorite",
+        dimensions: "112.3 cm × 75.7 cm × 28.4 cm",
+        location: "British Museum, London",
+        image: "https://cdn.mos.cms.futurecdn.net/v2/t:0,l:420,cw:1080,ch:1080,q:80,w:1080/bjqR7GxUQ25Z76P2tkjZnL.jpg",
+        facts: [
+          "Discovered in 1799 by French soldiers in Egypt",
+          "Contains inscriptions in three scripts: Greek, Demotic, and Hieroglyphic",
+          "Key to deciphering Egyptian hieroglyphs"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Created in 196 BCE, the Rosetta Stone is a decree issued during the Ptolemaic dynasty, inscribed with the same text in three scripts. Discovered in 1799 during Napoleon's campaign in Egypt, it became crucial for understanding ancient Egyptian writing.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The stone's trilingual inscription allowed scholars like Jean-François Champollion to decode hieroglyphs, unlocking Egypt's historical records. It represents a bridge between Greek and Egyptian cultures under Ptolemaic rule, reflecting administrative and religious practices.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Carved from granodiorite, the stone's inscriptions are precisely etched, with hieroglyphs at the top, Demotic in the middle, and Greek at the bottom. Its compact size made it portable for public display in ancient times.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Rosetta Stone is a global symbol of linguistic and historical discovery, inspiring software names and museum exhibits. Its presence in the British Museum sparks debates about cultural repatriation, highlighting its enduring significance.</p>
+        `
+      },
+      2: {
+        title: "Terracotta Army",
+        origin: "Qin Dynasty, China",
+        year: "c. 210 BCE",
+        material: "Terracotta",
+        dimensions: "Variable (life-sized figures)",
+        location: "Museum of Qin Terracotta Warriors, Xi'an, China",
+        image: "https://globalvolunteers.org/wp-content/uploads/2016/12/terracotta-army.jpg",
+        facts: [
+          "Commissioned by Emperor Qin Shi Huang",
+          "Discovered in 1974 by local farmers",
+          "Over 8,000 unique figures"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Terracotta Army, created around 210 BCE, was commissioned by China's first emperor, Qin Shi Huang, to guard his mausoleum. It reflects the Qin Dynasty's military power and belief in the afterlife.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The army's detailed figures, including soldiers, horses, and chariots, showcase the Qin's organizational prowess and artistic skill. Each figure's unique facial features suggest individualized craftsmanship, symbolizing the emperor's vast control.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Made from molded terracotta, the figures were assembled from standardized parts, painted with vibrant colors (now faded). The scale and number of figures demonstrate advanced production techniques for the period.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Terracotta Army is a UNESCO World Heritage Site, drawing millions to Xi'an. It has influenced global perceptions of ancient China, appearing in films, exhibitions, and inspiring archaeological preservation efforts.</p>
+        `
+      },
+      3: {
+        title: "Great Pyramids",
+        origin: "Ancient Egypt",
+        year: "c. 2580-2560 BCE",
+        material: "Limestone, granite",
+        dimensions: "Great Pyramid: 138.8 m tall (original height 146.6 m)",
+        location: "Giza Plateau, Egypt",
+        image: "https://cdn.sanity.io/images/cxgd3urn/production/61d0f2b055c644f8a01a720018fdb911d92b8b50-709x398.jpg?rect=24,0,663,398&w=1200&h=720&q=85&fit=crop&auto=format",
+        facts: [
+          "Built as tombs for pharaohs",
+          "The Great Pyramid was the tallest man-made structure for 3,800 years",
+          "Aligned with astronomical precision"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Great Pyramids of Giza, constructed around 2580-2560 BCE, were built during Egypt's Old Kingdom as monumental tombs for pharaohs Khufu, Khafre, and Menkaure. They represent the pinnacle of pyramid-building technology.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The pyramids' precise construction reflects the pharaohs' divine status and the civilization's advanced understanding of mathematics and astronomy. Their alignment with celestial bodies and the Nile River demonstrates sophisticated planning.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built from millions of limestone blocks, some weighing up to 80 tons, the pyramids employed complex ramp systems and precise leveling techniques. The Great Pyramid's interior contains elaborate chambers and passageways.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The pyramids are iconic symbols of ancient Egypt, attracting millions of visitors annually. They have inspired countless theories about their construction and purpose, and remain a testament to human engineering capabilities.</p>
+        `
+      },
+      4: {
+        title: "Parthenon",
+        origin: "Ancient Greece",
+        year: "447-438 BCE",
+        material: "Pentelic marble",
+        dimensions: "69.5 m × 30.9 m",
+        location: "Acropolis, Athens, Greece",
+        image: "https://drylayout.com/assets/images/articles/general/parthenon-min.jpg",
+        facts: [
+          "Dedicated to the goddess Athena",
+          "Designed by architects Ictinus and Callicrates",
+          "Survived as a temple, church, and mosque"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Parthenon, built between 447-438 BCE, was constructed during Athens' golden age under Pericles. It served as the centerpiece of the Acropolis, symbolizing Athenian power and cultural achievement.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>This Doric temple represents the height of classical Greek architecture, with its perfect proportions and sculptural decorations. The building's history reflects Greece's changing political and religious landscape over centuries.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built from Pentelic marble, the Parthenon features optical refinements like slightly curved lines to appear perfectly straight. Its sculptural program included a massive gold-and-ivory statue of Athena and elaborate metopes.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Parthenon is a global symbol of democracy and classical art. Ongoing restoration efforts and debates about the Elgin Marbles highlight its continued cultural significance and the complexities of heritage preservation.</p>
+        `
+      },
+      5: {
+        title: "Colosseum",
+        origin: "Roman Empire",
+        year: "70-80 CE",
+        material: "Travertine limestone, tuff, concrete",
+        dimensions: "189 m × 156 m × 50 m",
+        location: "Rome, Italy",
+        image: "https://cdn.mos.cms.futurecdn.net/BiNbcY5fXy9Lra47jqHKGK-1200-80.jpg",
+        facts: [
+          "Could hold 50,000-80,000 spectators",
+          "Hosted gladiatorial contests and public spectacles",
+          "Had a retractable awning system"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Colosseum, completed in 80 CE under Emperor Titus, was the largest amphitheater in the Roman world. Built on Nero's former palace site, it symbolized the Flavian dynasty's connection to the people.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>As a venue for gladiatorial games and public spectacles, the Colosseum served as political theater, reinforcing social hierarchy while providing entertainment. Its architecture reflected Roman engineering prowess and imperial propaganda.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>The elliptical structure employed advanced concrete techniques and a complex system of vaults and arches. Its hypogeum (underground area) contained elevators and trapdoors for dramatic entrances during events.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Colosseum remains an iconic symbol of Rome, attracting millions of visitors. It has influenced stadium design worldwide and serves as a powerful reminder of ancient spectacles and their social functions.</p>
+        `
+      },
+      6: {
+        title: "Code of Hammurabi",
+        origin: "Babylonian Empire",
+        year: "c. 1754 BCE",
+        material: "Diorite",
+        dimensions: "225 cm × 65 cm",
+        location: "Louvre Museum, Paris",
+        image: "https://res.cloudinary.com/jerrick/image/upload/v1694355316/64fdcf74e0c439001d5ac18a.jpg",
+        facts: [
+          "Commissioned by King Hammurabi",
+          "One of the earliest written law codes",
+          "Inscribed in Akkadian cuneiform"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Code of Hammurabi, created around 1754 BCE, is a Babylonian legal stele commissioned by King Hammurabi. It established laws for trade, family, and justice in one of the first urban civilizations.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The code's "eye for an eye" principles reflect a structured legal system, balancing retribution and social order. Its public display symbolized royal authority and accessibility, influencing Mesopotamian governance.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Carved into a diorite stele, the code features cuneiform script and a relief of Hammurabi with the god Shamash. Its durability and size ensured visibility and preservation for public use.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Code of Hammurabi is a cornerstone of legal history, influencing modern legal concepts. Its display in the Louvre and references in education highlight its role in understanding ancient governance.</p>
+        `
+      },
+      7: {
+        title: "Great Wall of China",
+        origin: "Various Chinese Dynasties",
+        year: "7th century BCE - 17th century CE",
+        material: "Stone, brick, tamped earth, wood",
+        dimensions: "21,196 km total length",
+        location: "Northern China",
+        image: "https://d3hne3c382ip58.cloudfront.net/files/uploads/bookmundi/resized/cmsfeatured/visiting-the-great-wall-of-china-featured-image-1560845062-785X440.jpg",
+        facts: [
+          "Built over 2,000 years by multiple dynasties",
+          "Visible from low Earth orbit",
+          "Includes watchtowers and garrison stations"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Great Wall was constructed over centuries by various Chinese dynasties, beginning in the 7th century BCE. Most famous sections were built by the Ming Dynasty (1368-1644) to protect against northern invasions.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>Beyond military defense, the Wall controlled trade along the Silk Road and symbolized imperial power. Its construction involved millions of workers and reflected China's changing relationships with northern neighbors.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built with local materials, the Wall's design adapted to terrain, incorporating signal towers and barracks. Ming sections used bricks and stone, while earlier walls employed rammed earth techniques.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Great Wall is China's most recognizable symbol, attracting millions of visitors. It represents Chinese civilization's endurance and has become a metaphor for cultural and psychological barriers worldwide.</p>
+        `
+      },
+      8: {
+        title: "Machu Picchu",
+        origin: "Inca Empire",
+        year: "c. 1450 CE",
+        material: "Granite",
+        dimensions: "Complex covers 32,500 hectares",
+        location: "Andes Mountains, Peru",
+        image: "https://www.incatrailmachu.com/img/machu-picchu-02-011.jpg",
+        facts: [
+          "Built as an estate for Emperor Pachacuti",
+          "Abandoned during Spanish conquest",
+          "Rediscovered in 1911 by Hiram Bingham"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Machu Picchu was constructed around 1450 CE as a royal retreat for Inca emperor Pachacuti. Located high in the Andes, it was abandoned during the Spanish conquest but remained unknown to colonists.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The site's sophisticated architecture and astronomical alignments reflect Inca engineering and spiritual beliefs. Its remote location suggests ceremonial importance and elite exclusivity within the empire.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Built without mortar using precisely cut granite stones, the structures withstand earthquakes. Terraces prevented erosion and provided agriculture, while an intricate water system supplied the complex.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>Machu Picchu is South America's most famous archaeological site, drawing over a million visitors annually. Its "discovery" shaped modern perceptions of Inca civilization and remains a symbol of indigenous achievement.</p>
+        `
+      },
+      9: {
+        title: "Venus de Milo",
+        origin: "Hellenistic Greece",
+        year: "c. 130-100 BCE",
+        material: "Marble",
+        dimensions: "203 cm high",
+        location: "Louvre Museum, Paris",
+        image: "https://d1inegp6v2yuxm.cloudfront.net/royal-academy/image/upload/c_limit,cs_tinysrgb,dn_72,f_auto,fl_progressive.keep_iptc,w_1200/yq3ruckksdsdq0njjoqn.jpeg",
+        facts: [
+          "Discovered in 1820 on Milos, Greece",
+          "Represents Aphrodite, goddess of love",
+          "Arms missing, likely broken in antiquity"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Venus de Milo, created around 130-100 BCE, is a Hellenistic Greek sculpture found on the island of Milos. It reflects the artistic sophistication of the period after Alexander the Great.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>Depicting Aphrodite, the statue embodies idealized beauty and sensuality, with a dynamic pose and flowing drapery. Its partial state enhances its mystique, connecting it to classical Greek traditions.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Carved from Parian marble, the statue's smooth surfaces and intricate drapery showcase advanced sculptural techniques. Its two-part construction and missing arms suggest challenges in preservation.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Venus de Milo is a Louvre icon, influencing art and fashion. Its fame grew after French acquisition, symbolizing classical beauty and sparking debates about repatriation to Greece.</p>
+        `
+      },
+      10: {
+        title: "Magna Carta",
+        origin: "Medieval England",
+        year: "1215 CE",
+        material: "Parchment",
+        dimensions: "Approx. 45 cm × 60 cm (original copies)",
+        location: "British Library, London (and others)",
+        image: "https://www.ancient-origins.net/sites/default/files/styles/article_image/public/field/image/The-Magna-Carta.jpg?itok=ZfudGbNb",
+        facts: [
+          "Signed by King John at Runnymede",
+          "Limited royal power, protecting barons",
+          "Four original copies survive"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>The Magna Carta, sealed in 1215 CE, was a charter between King John and rebellious barons, addressing grievances over royal authority. It laid the foundation for constitutional law in England.</p>
+          
+          <h2>Historical Analysis</h2>
+          <p>The document's clauses, like habeas corpus and trial by jury, established principles of justice and limited monarchy. Though initially a baronial agreement, it evolved into a symbol of universal rights.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Written in Latin on parchment, the Magna Carta was copied and distributed widely. Its preservation in lead cases and modern digitization ensure accessibility, with calligraphy reflecting medieval scribal art.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Magna Carta influenced modern democracies, notably the U.S. Constitution. Its legacy in law and human rights is celebrated globally, with copies displayed in museums and referenced in legal education.</p>
+        `
+      }
+    };
+
+    // Load favorites from localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    // Function to check if an item is in favorites
+    function isFavorite(id, type) {
+      return favorites.some(item => item.id == id && item.type === type);
+    }
+
+    // Function to toggle favorite status
+    function toggleFavorite(element, id, type, title, image) {
+      const item = { id, type, title, image };
+      const index = favorites.findIndex(fav => fav.id == id && fav.type === type);
+
+      if (index === -1) {
+        // Add to favorites
+        favorites.push(item);
+        element.classList.remove('text-gray-400');
+        element.classList.add('text-red-500');
+      } else {
+        // Remove from favorites
+        favorites.splice(index, 1);
+        element.classList.remove('text-red-500');
+        element.classList.add('text-gray-400');
+      }
+
+      // Update localStorage
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    // Load item based on ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const itemId = urlParams.get('id');
+    const item = items[itemId];
+
+    if (item) {
+      // Update page title
+      document.title = `${item.title} | Virtual Museum`;
+      
+      // Set item image
+      document.getElementById('item-img').src = item.image;
+      document.getElementById('item-img').alt = item.title;
+      
+      // Set favorite icon
+      const favoriteIcon = document.getElementById('favorite-icon');
+      favoriteIcon.textContent = '♥';
+      favoriteIcon.dataset.id = itemId;
+      favoriteIcon.dataset.title = item.title;
+      favoriteIcon.dataset.image = item.image;
+      if (isFavorite(itemId, 'history')) {
+        favoriteIcon.classList.remove('text-gray-400');
+        favoriteIcon.classList.add('text-red-500');
+      }
+      favoriteIcon.addEventListener('click', () => {
+        toggleFavorite(favoriteIcon, itemId, 'history', item.title, item.image);
+      });
+      
+      // Set basic info
+      document.getElementById('item-title').textContent = item.title;
+      document.getElementById('item-origin').textContent = item.origin;
+      document.getElementById('item-year').textContent = item.year;
+      document.getElementById('item-material').textContent = item.material;
+      document.getElementById('item-dimensions').textContent = item.dimensions;
+      document.getElementById('item-location').textContent = item.location;
+      
+      // Set facts list
+      const factsList = document.getElementById('item-facts');
+      item.facts.forEach(fact => {
+        const li = document.createElement('li');
+        li.textContent = fact;
+        factsList.appendChild(li);
+      });
+      
+      // Set detailed description
+      document.getElementById('item-description').innerHTML = item.description;
+    } else {
+      // Item not found
+      document.getElementById('item-detail').innerHTML = `
+        <div class="p-8 text-center">
+          <h2 class="text-2xl font-bold">Item Not Found</h2>
+          <p class="mt-4">The requested historical item could not be found in our collection.</p>
+          <a href="history-gallery.html" class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            Return to Gallery
+          </a>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

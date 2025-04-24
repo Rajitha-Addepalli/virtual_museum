@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artwork Detail - Virtual Museum</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { scroll-behavior: smooth; }
+    .artwork-image { max-height: 70vh; }
+    .prose h2 { font-size: 1.5rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 1rem; }
+    .prose p { margin-bottom: 1rem; line-height: 1.6; }
+    .prose ul { list-style-type: disc; padding-left: 1.5rem; }
+    .favorite-icon { cursor: pointer; }
+    .bg-custom-pink { background-color: #946D43; }
+    .text-custom-pink { color: #946D43; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Navigation -->
+  <nav class="bg-custom-pink text-white p-4 fixed w-full top-0 z-10">
+    <div class="flex justify-between items-center">
+      <a href="home.html" class="text-4xl font-bold ml-0">Virtual Museum</a>
+      <div class="hidden md:flex space-x-4">
+        <a href="home.html" class="hover:text-gray-200">Home</a>
+        <a href="galleries.html" class="hover:text-gray-200">Galleries</a>
+        <a href="dashboard.html" class="hover:text-gray-200">Dashboard</a>
+        <a href="favorites.html" class="hover:text-gray-200">Favorites</a>
+        <a href="galleries.html" class="hover:text-gray-200">Back to Gallery</a>
+      </div>
+      <button id="menu-toggle" class="md:hidden focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-custom-pink">
+      <a href="home.html" class="block py-2 px-4 hover:bg-indigo-700">Home</a>
+      <a href="galleries.html" class="block py-2 px-4 hover:bg-indigo-700">Galleries</a>
+      <a href="dashboard.html" class="block py-2 px-4 hover:bg-indigo-700">Dashboard</a>
+      <a href="favorites.html" class="block py-2 px-4 hover:bg-indigo-700">Favorites</a>
+      <a href="galleries.html" class="block py-2 px-4 hover:bg-indigo-700">Back to Gallery</a>
+    </div>
+  </nav>
+
+  <!-- Artwork Detail Section -->
+  <section class="min-h-screen pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <div id="artwork-detail" class="max-w-6xl mx-auto bg-white rounded-lg shadow-xl overflow-hidden animate-fade-in">
+        <!-- Image and basic info -->
+        <div class="md:flex">
+          <div class="md:w-1/2 relative">
+            <img id="artwork-img" src="" alt="" class="w-full h-full object-cover artwork-image">
+            <span id="favorite-icon" class="favorite-icon absolute top-2 right-2 text-3xl p-1 bg-white rounded-full text-gray-400"></span>
+          </div>
+          <div class="p-6 md:p-8 md:w-1/2">
+            <h1 id="artwork-title" class="text-3xl font-bold"></h1>
+            <p id="artwork-artist" class="text-xl text-gray-600 mt-2"></p>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+              <div>
+                <h4 class="font-semibold">Year Created</h4>
+                <p id="artwork-year"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Medium</h4>
+                <p id="artwork-medium"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Dimensions</h4>
+                <p id="artwork-dimensions"></p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Location</h4>
+                <p id="artwork-location"></p>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <h4 class="font-semibold">Quick Facts</h4>
+              <ul id="artwork-facts" class="mt-2"></ul>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Detailed description -->
+        <div class="p-6 md:p-8 border-t">
+          <div id="artwork-description" class="prose max-w-none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-custom-pink text-white p-4">
+    <div class="container mx-auto text-center">
+      <p>© 2025 Virtual Museum. All rights reserved.</p>
+      <div class="flex justify-center space-x-4 mt-4">
+        <a href="#" class="hover:text-gray-300">Twitter</a>
+        <a href="#" class="hover:text-gray-300">Instagram</a>
+        <a href="#" class="hover:text-gray-300">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+
+    // Artwork database with detailed educational information
+    const artworks = {
+      1: {
+        title: "Starry Night",
+        artist: "Vincent van Gogh (1853-1890)",
+        year: "1889",
+        medium: "Oil on canvas",
+        dimensions: "73.7 cm × 92.1 cm (29 in × 36 1⁄4 in)",
+        location: "Museum of Modern Art, New York City",
+        image: "https://i.pinimg.com/736x/5f/b1/7e/5fb17e9a0291445b49b425d33720c300.jpg",
+        facts: [
+          "Painted during van Gogh's stay at an asylum in Saint-Rémy",
+          "One of the most recognized paintings in Western art",
+          "Features a rare combination of the moon and morning star"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted in June 1889, Starry Night depicts the view from van Gogh's east-facing asylum room window at Saint-Rémy-de-Provence, just before sunrise. This work was created during a particularly turbulent period in the artist's life, while he was voluntarily institutionalized.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting is renowned for its swirling, turbulent sky filled with expressive brushstrokes. The village below is imaginary, possibly inspired by van Gogh's memories of the Netherlands. The cypress tree in the foreground connects earth and sky, possibly symbolizing death (cypress trees were commonly associated with cemeteries).</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Van Gogh employed thick, undulating brushstrokes to create movement in the sky. The painting demonstrates his innovative use of color, with contrasting cool blues and warm yellows creating visual tension. The impasto technique gives the work a three-dimensional quality.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>Though van Gogh sold only a few paintings during his lifetime, Starry Night became one of the most famous works of modern art. It has influenced countless artists and has been referenced in popular culture numerous times. The painting's emotional intensity continues to resonate with viewers worldwide.</p>
+        `
+      },
+      2: {
+        title: "Mona Lisa",
+        artist: "Leonardo da Vinci (1452-1519)",
+        year: "1503–1519",
+        medium: "Oil on poplar panel",
+        dimensions: "77 cm × 53 cm (30 in × 21 in)",
+        location: "Louvre Museum, Paris",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZU8L3di7t-43w-J9ln0R-BouyN5lJx5ac-jG3DtIyRqa0ZHdQYeY2FLwrHdvLCy3wfaI&usqp=CAU",
+        facts: [
+          "Also known as La Gioconda",
+          "Believed to depict Lisa Gherardini",
+          "Stolen from the Louvre in 1911"
+        ],
+        description: `
+          <h2>Historical Background</h2>
+          <p>The Mona Lisa is a half-length portrait painting by Italian Renaissance artist Leonardo da Vinci. It's believed to have been painted between 1503 and 1506, though Leonardo may have continued working on it as late as 1517. The subject is generally thought to be Lisa Gherardini, the wife of Florentine merchant Francesco del Giocondo.</p>
+          
+          <h2>Artistic Significance</h2>
+          <p>The painting is renowned for its composition, subtle coloring, and most notably, the subject's enigmatic expression. Leonardo's mastery of sfumato (the technique of soft, blended edges) creates the mysterious smile that appears to change depending on the viewer's perspective. The background's atmospheric perspective was revolutionary for its time.</p>
+          
+          <h2>Technical Innovations</h2>
+          <p>Leonardo employed several innovative techniques: the pyramidal composition creates stability, the hands form a solid base, and the gaze follows the viewer. The painting's balanced proportions reflect Renaissance ideals of harmony. The landscape background shows Leonardo's understanding of geological formations.</p>
+          
+          <h2>Cultural Legacy</h2>
+          <p>The Mona Lisa's fame skyrocketed after its theft in 1911 and recovery in 1913. It has been vandalized several times, leading to its current protective enclosure. The painting has been parodied and referenced in countless works of popular culture and remains a symbol of artistic achievement and mystery.</p>
+        `
+      },
+      3: {
+        title: "David",
+        artist: "Michelangelo Buonarroti (1475-1564)",
+        year: "1501-1504",
+        medium: "Marble",
+        dimensions: "517 cm × 199 cm (17 ft × 6.5 ft)",
+        location: "Galleria dell'Accademia, Florence",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkTISMk5saoXsOn2S-qxwJ2f-pxZmvBWJeJg&s",
+        facts: [
+          "Commissioned for the Florence Cathedral",
+          "Represents the biblical hero David before his battle with Goliath",
+          "Moved to the Accademia in 1873 for preservation"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Created between 1501 and 1504, Michelangelo's David was commissioned as part of a series of statues for the Florence Cathedral. Carved from a single block of Carrara marble, it was intended to symbolize the strength and independence of the Florentine Republic during a period of political turmoil.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The sculpture depicts David in a moment of contemplation before his battle with Goliath, exuding tension and readiness. Michelangelo's attention to anatomical detail, particularly in the veins and muscles, showcases his mastery of human form. The contrapposto pose adds dynamism, contrasting with the statue's serene expression.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Michelangelo worked with a marble block that had been partially shaped by earlier sculptors, presenting significant challenges. His use of subtractive sculpture techniques allowed him to reveal the figure within the stone. The statue's disproportionate hands and head emphasize its monumental scale when viewed from below.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>David became a symbol of Florentine civic pride and Renaissance humanism, embodying ideals of beauty and heroism. It has inspired countless artists and remains a pinnacle of sculptural achievement. The statue's relocation to the Accademia and replicas worldwide underscore its enduring global influence.</p>
+        `
+      },
+      4: {
+        title: "The Persistence of Memory",
+        artist: "Salvador Dalí (1904-1989)",
+        year: "1931",
+        medium: "Oil on canvas",
+        dimensions: "24.1 cm × 33 cm (9.5 in × 13 in)",
+        location: "Museum of Modern Art, New York City",
+        image: "https://upload.wikimedia.org/wikipedia/en/d/dd/The_Persistence_of_Memory.jpg",
+        facts: [
+          "Iconic surrealist painting featuring melting clocks",
+          "Inspired by a piece of melting Camembert cheese",
+          "Completed in a single day"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted in 1931, The Persistence of Memory is one of Salvador Dalí's most famous works, created during the height of the Surrealist movement. It reflects Dalí's fascination with the subconscious and his exploration of time and reality, influenced by Freudian psychoanalysis.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting features soft, melting clocks draped over a box, a cliff, and a mysterious figure, set against a desolate landscape. This imagery challenges conventional perceptions of time as rigid, suggesting its fluidity in the dream state. The barren backdrop evokes a sense of timelessness and isolation.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Dalí's meticulous brushwork creates a hyper-realistic effect, typical of his surrealist style. The juxtaposition of hard (cliffs, box) and soft (clocks) elements creates visual tension. His use of muted earth tones with bright highlights draws attention to the surreal elements, enhancing their dreamlike quality.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Persistence of Memory became an emblem of Surrealism, influencing art, literature, and popular culture. Its melting clocks are among the most recognizable images in modern art, appearing in films, advertisements, and parodies. The painting continues to provoke discussions about time, memory, and reality.</p>
+        `
+      },
+      5: {
+        title: "Girl with a Pearl Earring",
+        artist: "Johannes Vermeer (1632-1675)",
+        year: "c. 1665",
+        medium: "Oil on canvas",
+        dimensions: "44.5 cm × 39 cm (17.5 in × 15 in)",
+        location: "Mauritshuis, The Hague",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTF5HpdWVztivbBKJWNybT8yUpgFsRI6863iTMEtlzhA2crKIqhVnj6_xCPNKYGfQkJyQ&usqp=CAU",
+        facts: [
+          "Often called the 'Mona Lisa of the North'",
+          "Painted during the Dutch Golden Age",
+          "Subject's identity remains unknown"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Created around 1665, Girl with a Pearl Earring is one of Johannes Vermeer's most celebrated works, painted during the Dutch Golden Age. The painting is a tronie, a type of Dutch portrait depicting an idealized or anonymous figure, rather than a specific individual.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting captivates with its simplicity and the subject's direct gaze, which creates an intimate connection with the viewer. The luminous pearl and the girl's blue turban contrast against the dark background, drawing attention to her face. Vermeer's use of light and shadow adds depth and realism.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Vermeer masterfully employs chiaroscuro to model the girl's face, with soft transitions between light and shadow. His use of ultramarine blue, a costly pigment, underscores the painting's value. The pearl's reflective quality is achieved with minimal brushstrokes, showcasing his technical precision.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>Girl with a Pearl Earring gained widespread fame in the 20th century, inspiring a novel and film of the same name. Its enigmatic quality and Vermeer's limited oeuvre have made it a cultural icon, often compared to the Mona Lisa for its mysterious allure and universal appeal.</p>
+        `
+      },
+      6: {
+        title: "The Scream",
+        artist: "Edvard Munch (1863-1944)",
+        year: "1893",
+        medium: "Tempera and pastel on cardboard",
+        dimensions: "91 cm × 73.5 cm (36 in × 29 in)",
+        location: "National Gallery, Oslo",
+        image: "https://cdn.kastatic.org/ka-perseus-images/6a6151155fbde50cec7b9616661c1448d3374fa7.jpg",
+        facts: [
+          "Exists in four versions, two paintings and two lithographs",
+          "Inspired by Munch's own experience of anxiety",
+          "Stolen in 1994 and 2004, later recovered"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted in 1893, The Scream is Edvard Munch's most famous work, created during a period of personal and societal turmoil in Norway. It is considered a seminal piece of Expressionism, reflecting Munch's exploration of existential anxiety and human emotion.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting depicts a skeletal figure with an agonized expression, hands clasped to its face, against a turbulent, blood-red sky. The swirling lines and vivid colors convey intense emotional distress. The bridge and distant figures anchor the composition, emphasizing the figure's isolation.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Munch used tempera and pastel to create bold, contrasting colors, with the red sky dominating the composition. The fluid, wavy lines of the sky and water contrast with the rigid bridge, enhancing the sense of unease. His loose brushwork captures raw emotion over precise detail.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Scream has become a universal symbol of anxiety and existential dread, influencing art, psychology, and popular culture. Its image appears in films, cartoons, and merchandise, and its thefts heightened its fame. The painting remains a powerful expression of the human condition.</p>
+        `
+      },
+      7: {
+        title: "Guernica",
+        artist: "Pablo Picasso (1881-1973)",
+        year: "1937",
+        medium: "Oil on canvas",
+        dimensions: "349.3 cm × 776.6 cm (137.4 in × 305.5 in)",
+        location: "Museo Reina Sofía, Madrid",
+        image: "https://preview.redd.it/in-the-original-jurassic-park-the-dinosaur-mural-behind-the-v0-8hs69lzptrja1.png?width=640&crop=smart&auto=webp&s=6e5ab3199289c0217875fcb8fec71aeaf0d0e267",
+        facts: [
+          "Commissioned for the Spanish Pavilion at the 1937 Paris World's Fair",
+          "Inspired by the bombing of Guernica during the Spanish Civil War",
+          "Uses a monochromatic palette to emphasize horror"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted in 1937, Guernica was Picasso's response to the bombing of the Basque town of Guernica by Nazi and Fascist forces during the Spanish Civil War. Created for the Spanish Pavilion at the Paris World's Fair, it aimed to draw international attention to the atrocities of war.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The monumental canvas depicts a chaotic scene of suffering, with distorted figures of humans and animals in anguish. The fragmented forms and overlapping shapes convey the devastation of war. Symbols like the bull, horse, and light bulb add layers of meaning, representing brutality and hope.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Picasso's use of a grayscale palette heightens the painting's emotional impact, evoking newspaper photographs of the time. The cubist style fragments the scene, creating a sense of disarray. The large scale forces viewers to confront the horror, with dynamic lines guiding the eye across the composition.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>Guernica is one of the most powerful anti-war statements in art, influencing political art and activism. It toured internationally to raise funds for Spanish Republican causes and remains a symbol of resistance against oppression. Its universal message continues to resonate in discussions of war and human rights.</p>
+        `
+      },
+      8: {
+        title: "The Birth of Venus",
+        artist: "Sandro Botticelli (c. 1445-1510)",
+        year: "c. 1484-1486",
+        medium: "Tempera on canvas",
+        dimensions: "172.5 cm × 278.9 cm (67.9 in × 109.6 in)",
+        location: "Uffizi Gallery, Florence",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/960px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg",
+        facts: [
+          "Commissioned by the Medici family",
+          "One of the first large-scale mythological paintings of the Renaissance",
+          "Inspired by classical Greek and Roman art"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted around 1484-1486, The Birth of Venus was commissioned by the Medici family, prominent patrons of the arts in Florence. It reflects the Renaissance revival of classical mythology and humanism, celebrating beauty and love during a period of cultural flourishing.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting depicts Venus emerging from the sea, standing on a shell, with Zephyr and Aura blowing her toward shore. The graceful pose and flowing lines of Venus's body exude elegance, while the surrounding figures create a sense of movement. The composition balances idealism with naturalism.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Botticelli used tempera to achieve vibrant colors and delicate details, particularly in Venus's hair and the waves. The linear quality of his brushwork reflects Gothic influences, while the soft modeling of forms shows Renaissance innovation. The large canvas size underscores the painting's importance.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Birth of Venus is a cornerstone of Renaissance art, embodying ideals of beauty and classical revival. It has inspired artists, poets, and designers, appearing in fashion, literature, and popular culture. Its preservation in the Uffizi Gallery ensures its status as a cultural treasure.</p>
+        `
+      },
+      9: {
+        title: "American Gothic",
+        artist: "Grant Wood (1891-1942)",
+        year: "1930",
+        medium: "Oil on beaverboard",
+        dimensions: "78 cm × 65.3 cm (30.7 in × 25.7 in)",
+        location: "Art Institute of Chicago",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmTBT7DqLgnuXePMwkA4DB3HNXgXDfs981ppdOhFmkvM4jyVeASJPHQHlkOb8pBwZyXfk&usqp=CAU",
+        facts: [
+          "Inspired by a house in Eldon, Iowa",
+          "Depicts a farmer and his daughter, not a couple",
+          "Won a bronze medal at the Art Institute of Chicago"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Painted in 1930, American Gothic captures rural American life during the Great Depression. Grant Wood, a leading figure in Regionalism, sought to celebrate Midwestern values and counter urban-centric art trends, creating an iconic image of stoic resilience.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting features a farmer and his daughter standing rigidly, with a pitchfork symbolizing labor and tradition. The stern expressions and detailed rendering of their clothing contrast with the simplified house in the background, evoking both pride and hardship. The composition is both realistic and slightly stylized.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Wood used oil on beaverboard, achieving a smooth, almost photographic quality. His meticulous attention to detail in the figures' faces and textures contrasts with the softer background, creating depth. The geometric composition, with vertical and horizontal lines, reinforces the figures' solidity.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>American Gothic is one of the most recognizable images in American art, often parodied in media to represent rural or conservative values. Its ambiguity—whether celebratory or satirical—sparks ongoing debate. The painting remains a touchstone for discussions of American identity and culture.</p>
+        `
+      },
+      10: {
+        title: "The Night Watch",
+        artist: "Rembrandt van Rijn (1606-1669)",
+        year: "1642",
+        medium: "Oil on canvas",
+        dimensions: "363 cm × 437 cm (142.9 in × 172 in)",
+        location: "Rijksmuseum, Amsterdam",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/The_Night_Watch_-_HD.jpg/1200px-The_Night_Watch_-_HD.jpg",
+        facts: [
+          "Officially titled 'Militia Company of District II under the Command of Captain Frans Banning Cocq'",
+          "Trimmed in 1715 to fit a new location",
+          "Restored in the 20th century to reveal its full brilliance"
+        ],
+        description: `
+          <h2>Historical Context</h2>
+          <p>Completed in 1642, The Night Watch is Rembrandt's largest and most ambitious work, commissioned by a militia company led by Captain Frans Banning Cocq. Painted during the Dutch Golden Age, it reflects the prosperity and civic pride of Amsterdam's merchant class.</p>
+          
+          <h2>Artistic Analysis</h2>
+          <p>The painting depicts a militia company preparing to march, with dynamic figures in varied poses creating a sense of movement. Rembrandt's dramatic use of light highlights key figures, such as the captain and a young girl, against a darker background, adding depth and focus.</p>
+          
+          <h2>Technical Aspects</h2>
+          <p>Rembrandt's mastery of chiaroscuro creates a theatrical effect, with light streaming from the left to illuminate the scene. His loose brushwork in the background contrasts with detailed rendering of faces and costumes. The large scale and complex composition showcase his technical skill.</p>
+          
+          <h2>Cultural Impact</h2>
+          <p>The Night Watch is a cornerstone of Dutch art, celebrated for its innovation and grandeur. It has been a centerpiece of the Rijksmuseum, surviving damage and restoration. The painting's dynamic composition influenced later group portraits and remains a symbol of Dutch cultural heritage.</p>
+        `
+      }
+    };
+
+    // Load favorites from localStorage
+    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    // Function to check if an item is in favorites
+    function isFavorite(id, type) {
+      return favorites.some(item => item.id == id && item.type === type);
+    }
+
+    // Function to toggle favorite status
+    function toggleFavorite(element, id, type, title, image) {
+      const item = { id, type, title, image };
+      const index = favorites.findIndex(fav => fav.id == id && fav.type === type);
+
+      if (index === -1) {
+        // Add to favorites
+        favorites.push(item);
+        element.classList.remove('text-gray-400');
+        element.classList.add('text-red-500');
+      } else {
+        // Remove from favorites
+        favorites.splice(index, 1);
+        element.classList.remove('text-red-500');
+        element.classList.add('text-gray-400');
+      }
+
+      // Update localStorage
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+    }
+
+    // Load artwork based on ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const artworkId = urlParams.get('id');
+    const artwork = artworks[artworkId];
+
+    if (artwork) {
+      // Update page title
+      document.title = `${artwork.title} | Virtual Museum`;
+      
+      // Set artwork image
+      document.getElementById('artwork-img').src = artwork.image;
+      document.getElementById('artwork-img').alt = artwork.title;
+      
+      // Set favorite icon
+      const favoriteIcon = document.getElementById('favorite-icon');
+      favoriteIcon.textContent = '♥';
+      favoriteIcon.dataset.id = artworkId;
+      favoriteIcon.dataset.title = artwork.title;
+      favoriteIcon.dataset.image = artwork.image;
+      if (isFavorite(artworkId, 'art')) {
+        favoriteIcon.classList.remove('text-gray-400');
+        favoriteIcon.classList.add('text-red-500');
+      }
+      favoriteIcon.addEventListener('click', () => {
+        toggleFavorite(favoriteIcon, artworkId, 'art', artwork.title, artwork.image);
+      });
+      
+      // Set basic info
+      document.getElementById('artwork-title').textContent = artwork.title;
+      document.getElementById('artwork-artist').textContent = artwork.artist;
+      document.getElementById('artwork-year').textContent = artwork.year;
+      document.getElementById('artwork-medium').textContent = artwork.medium;
+      document.getElementById('artwork-dimensions').textContent = artwork.dimensions;
+      document.getElementById('artwork-location').textContent = artwork.location;
+      
+      // Set facts list
+      const factsList = document.getElementById('artwork-facts');
+      artwork.facts.forEach(fact => {
+        const li = document.createElement('li');
+        li.textContent = fact;
+        factsList.appendChild(li);
+      });
+      
+      // Set detailed description
+      document.getElementById('artwork-description').innerHTML = artwork.description;
+    } else {
+      // Artwork not found
+      document.getElementById('artwork-detail').innerHTML = `
+        <div class="p-8 text-center">
+          <h2 class="text-2xl font-bold">Artwork Not Found</h2>
+          <p class="mt-4">The requested artwork could not be found in our collection.</p>
+          <a href="galleries.html" class="inline-block mt-4 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">
+            Return to Gallery
+          </a>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
